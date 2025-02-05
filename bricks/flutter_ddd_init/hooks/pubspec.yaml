@@ -1,0 +1,8 @@
+name: flutter_ddd_hooks
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  mason: "^0.1.0"
+  yaml_magic: ^1.0.6

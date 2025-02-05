@@ -1,0 +1,102 @@
+name: flutter_ddd_init
+description: A new brick created with the Mason CLI.
+
+# The following defines the brick repository url.
+# Uncomment and update the following line before publishing the brick.
+# repository: https://github.com/my_org/my_repo
+
+# The following defines the version and build number for your brick.
+# A version number is three numbers separated by dots, like 1.2.34
+# followed by an optional build number (separated by a +).
+version: 0.1.0+1
+
+# The following defines the environment for the current brick.
+# It includes the version of mason that the brick requires.
+environment:
+  mason: ">=0.1.0"
+
+vars:
+  project_name:
+    type: string
+    description: "The project name"
+
+  uses_secure_storage:
+    type: boolean
+    description: "Use secure storage?"
+
+  uses_state_management:
+    type: boolean
+    description: "Use state management?"
+
+  state_management_library:
+    type: enum
+    description: "Which state management library to use?"
+    default: "riverpod"
+    values:
+      - "riverpod"
+      - "provider"
+      - "bloc"
+      - "getx"
+
+  http_client:
+    type: enum
+    description: "Which HTTP client to use?"
+    default: "dio"
+    values:
+      - "dio"
+      - "http"
+
+  env_modes:
+    type: list
+    description: "Environment modes (e.g., dev, prod)"
+
+  enable_logging:
+    type: boolean
+    description: "Enable logging in the project?"
+
+  logging_library:
+    type: enum
+    description: "Which logging library to use?"
+    default: "logger"
+    values:
+      - "logger"
+      - "firebase_crashlytics"
+      - "sentry"
+
+  enable_dependency_injection:
+    type: boolean
+    description: "Enable dependency injection?"
+
+  dependency_injection_library:
+    type: enum
+    description: "Which DI library to use?"
+    default: "get_it"
+    values:
+      - "get_it"
+      - "injectable"
+
+  enable_testing:
+    type: boolean
+    description: "Enable testing setup?"
+
+  testing_library:
+    type: enum
+    description: "Which testing library to use?"
+    default: "flutter_test"
+    values:
+      - "flutter_test"
+      - "mockito"
+      - "bloc_test"
+
+  enable_navigation:
+    type: boolean
+    description: "Use a navigation library?"
+
+  navigation_library:
+    type: enum
+    description: "Which navigation library to use?"
+    default: "go_router"
+    values:
+      - "go_router"
+      - "auto_route"
+
