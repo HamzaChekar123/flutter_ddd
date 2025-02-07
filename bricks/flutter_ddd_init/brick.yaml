@@ -37,6 +37,7 @@ vars:
       - "provider"
       - "bloc"
       - "getx"
+      - "none"
 
   http_client:
     type: enum
@@ -99,4 +100,3 @@ vars:
     values:
       - "go_router"
       - "auto_route"
-
