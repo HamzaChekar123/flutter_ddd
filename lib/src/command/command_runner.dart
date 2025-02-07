@@ -79,7 +79,7 @@ class FlutterDddCommandRunner extends CompletionCommandRunner<int> {
       ..detail('  Top level options:');
     for (final option in topLevelResults.options) {
       if (topLevelResults.wasParsed(option)) {
-        _logger.detail('  - $option: ${topLevelResults[option]}');
+        _logger.detail('  - $option: ${topLevelResults[option] ?? "NULL"}'); // ✅ Print NULL values
       }
     }
     if (topLevelResults.command != null) {
@@ -89,7 +89,7 @@ class FlutterDddCommandRunner extends CompletionCommandRunner<int> {
         ..detail('    Command options:');
       for (final option in commandResult.options) {
         if (commandResult.wasParsed(option)) {
-          _logger.detail('    - $option: ${commandResult[option]}');
+          _logger.detail('    - $option: ${commandResult[option] ?? "NULL"}'); // ✅ Print NULL values
         }
       }
     }
