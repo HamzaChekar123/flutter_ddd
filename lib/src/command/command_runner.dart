@@ -27,9 +27,7 @@ class FlutterDddCommandRunner extends CompletionCommandRunner<int> {
 
     // Add sub commands
     addCommand(
-      InitCommand(
-        logger: _logger,
-      ),
+      InitCommand(logger: _logger),
     );
   }
 
@@ -96,7 +94,7 @@ class FlutterDddCommandRunner extends CompletionCommandRunner<int> {
 
     // Run the command or show version
     final int? exitCode;
-    if (topLevelResults['version'] == true) {
+    if (topLevelResults['version'] ?? false) {
       _logger.info(packageVersion);
       exitCode = ExitCode.success.code;
     } else {

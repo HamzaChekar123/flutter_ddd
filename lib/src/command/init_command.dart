@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:args/command_runner.dart';
+import 'package:flutter_ddd/src/command/logger_adapter.dart';
 import 'package:mason/mason.dart';
 
 import 'flutter_ddd_init_bundle.dart';
@@ -30,7 +31,7 @@ class InitCommand extends Command<int> {
 
     // Ask for the feature name
     vars['project_name'] = _logger.prompt(
-      'What is the name of the feature?',
+      'What is the name of the project?',
       defaultValue: 'example_feature',
     );
 
@@ -82,6 +83,27 @@ class InitCommand extends Command<int> {
       defaultValue: true,
     );
 
+    vars['navigation_library'] = _logger.chooseOne(
+      'Which navigation library to use?',
+      choices: ['go_router', 'auto_route'],
+      defaultValue: 'auto_route',
+    );
+
+    vars['enable_testing'] = _logger.confirm(
+      'Enable testing setup?',
+      defaultValue: true,
+    );
+
+    vars['testing_library'] = _logger.chooseOne(
+      'Which testing library to use?',
+      choices: ['flutter_test', 'mockito', 'bloc_test'],
+      defaultValue: 'auto_route',
+    );
+
+    vars['enable_navigation'] = _logger.confirm(
+      'Use a navigation library?',
+      defaultValue: true,
+    );
     // Log the initialization start
     _logger.info('👨‍🔧 Initializing the project for DDD architecture...');
 
