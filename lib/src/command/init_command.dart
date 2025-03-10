@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:args/command_runner.dart';
-import 'package:flutter_ddd/src/command/logger_adapter.dart';
 import 'package:mason/mason.dart';
 
 import 'flutter_ddd_init_bundle.dart';
