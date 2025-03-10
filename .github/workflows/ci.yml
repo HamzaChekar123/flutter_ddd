@@ -45,5 +45,5 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter pub get
-      - run: cd example && flutter build apk --debug
-      - run: cd example && flutter build web
+      - run: flutter build apk --debug
+      - run: flutter build web
