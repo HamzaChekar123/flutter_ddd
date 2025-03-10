@@ -12,33 +12,35 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: 'stable'
+      - name: Install Flutter SDK
+        run: |
+          git clone https://github.com/flutter/flutter.git -b stable
+          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       
       - name: Install Dependencies
-        run: dart pub get
+        run: flutter pub get
       
       - name: Verify Formatting
         run: dart format --output=none --set-exit-if-changed .
       
       - name: Analyze
-        run: dart analyze --fatal-infos
+        run: flutter analyze --fatal-infos
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: 'stable'
+      - name: Install Flutter SDK
+        run: |
+          git clone https://github.com/flutter/flutter.git -b stable
+          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       
       - name: Install Dependencies
-        run: dart pub get
+        run: flutter pub get
       
       - name: Run Tests
-        run: dart test
+        run: flutter test
       
       - name: Upload coverage
         uses: codecov/codecov-action@v3
@@ -63,7 +65,7 @@ jobs:
           sdk: 'stable'
       
       - name: Install Dependencies
-        run: dart pub get
+        run: flutter pub get
       
       - name: Build Package
         run: dart compile exe bin/flutter_ddd.dart -o flutter_ddd
