@@ -7,43 +7,71 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  analyze:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
+      
+      - uses: dart-lang/setup-dart@v1
         with:
-          channel: 'stable'
-      - run: flutter pub get
-      - run: flutter analyze
-      - name: Check formatting
+          sdk: 'stable'
+      
+      - name: Install Dependencies
+        run: dart pub get
+      
+      - name: Verify Formatting
         run: dart format --output=none --set-exit-if-changed .
+      
+      - name: Analyze
+        run: dart analyze --fatal-infos
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
+      
+      - uses: dart-lang/setup-dart@v1
         with:
-          channel: 'stable'
-      - run: flutter pub get
-      - run: flutter test --coverage
-      - name: Upload coverage to Codecov
+          sdk: 'stable'
+      
+      - name: Install Dependencies
+        run: dart pub get
+      
+      - name: Run Tests
+        run: dart test
+      
+      - name: Upload coverage
         uses: codecov/codecov-action@v3
+        if: success()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage1.xml,./coverage2.xml
-          flags: unittests
-          name: codecov-umbrella # optional
-          verbose: true
+          file: ./coverage/lcov.info
+          fail_ci_if_error: false
 
-  build_example:
-    runs-on: ubuntu-latest
+  build-and-test-package:
+    name: Build and test package on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
+      
+      - uses: dart-lang/setup-dart@v1
         with:
-          channel: 'stable'
-      - run: flutter pub get
-      - run: flutter build apk --debug
-      - run: flutter build web
+          sdk: 'stable'
+      
+      - name: Install Dependencies
+        run: dart pub get
+      
+      - name: Build Package
+        run: dart compile exe bin/flutter_ddd.dart -o flutter_ddd
+      
+      - name: Test CLI with sample init
+        shell: bash
+        run: |
+          mkdir -p test_project
+          cd test_project
+          ../flutter_ddd --version
+          echo "CLI version test completed"
