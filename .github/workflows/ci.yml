@@ -7,38 +7,69 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  verify:
+  setup:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      flutter-version: ${{ steps.get-flutter-version.outputs.version }}
     steps:
       - uses: actions/checkout@v3
       
-      - name: Install Flutter SDK
-        run: |
-          git clone https://github.com/flutter/flutter.git -b stable
-          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v2
+      
+      - name: Cache Flutter SDK
+        id: flutter-cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.flutter
+          key: flutter-sdk-${{ steps.get-flutter-version.outputs.version }}
+          restore-keys: flutter-sdk-
+
+  verify:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ needs.setup.outputs.flutter-version }}
+          cache: true
       
       - name: Install Dependencies
         run: flutter pub get
-      
+        timeout-minutes: 5
       
       - name: Analyze
         run: flutter analyze --fatal-infos
+        timeout-minutes: 5
 
   test:
+    needs: setup
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v3
       
-      - name: Install Flutter SDK
-        run: |
-          git clone https://github.com/flutter/flutter.git -b stable
-          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ needs.setup.outputs.flutter-version }}
+          cache: true
       
       - name: Install Dependencies
         run: flutter pub get
+        timeout-minutes: 5
       
       - name: Run Tests
         run: flutter test
+        timeout-minutes: 5
       
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
@@ -48,24 +79,31 @@ jobs:
 
   build-and-test-package:
     name: Build and test package on ${{ matrix.os }}
+    needs: setup
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
     
     steps:
       - uses: actions/checkout@v3
       
-      - name: Install Flutter SDK
-        run: |
-          git clone https://github.com/flutter/flutter.git -b stable
-          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ needs.setup.outputs.flutter-version }}
+          cache: true
       
       - name: Install Dependencies
         run: flutter pub get
+        timeout-minutes: 5
       
       - name: Build Package
         run: dart compile exe bin/flutter_ddd.dart -o flutter_ddd
+        timeout-minutes: 5
       
       - name: Test CLI with sample init
         shell: bash
@@ -74,3 +112,4 @@ jobs:
           cd test_project
           ../flutter_ddd --version
           echo "CLI version test completed"
+        timeout-minutes: 3
