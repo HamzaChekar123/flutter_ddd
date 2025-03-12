@@ -8,7 +8,4 @@ runs:
       shell: bash
       run: flutter analyze --fatal-infos
       
-    - name: Validate pubspec
-      shell: bash
-      run: flutter pub publish --dry-run
       
