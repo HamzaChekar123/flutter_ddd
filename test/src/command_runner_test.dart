@@ -3,7 +3,6 @@ import 'package:flutter_ddd/src/command/command_runner.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mocktail/mocktail.dart';
-// ignore: depend_on_referenced_packages
 import 'package:mason_logger/mason_logger.dart';
 
 class _MockLogger extends Mock implements Logger {}

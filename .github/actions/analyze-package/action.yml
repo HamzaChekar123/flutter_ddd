@@ -1,0 +1,14 @@
+name: "Analyze Package"
+description: "Analyzes Flutter package code for issues"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Flutter analyzer
+      shell: bash
+      run: flutter analyze --fatal-infos
+      
+    - name: Validate pubspec
+      shell: bash
+      run: flutter pub publish --dry-run
+      

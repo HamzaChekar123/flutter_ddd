@@ -1,4 +1,4 @@
-# 0.1.0+1
+# 0.0.1
 
 - Initial release of the Flutter DDD package.
 - Includes basic project structure for Domain-Driven Design.

@@ -1,0 +1,29 @@
+name: "Setup Flutter"
+description: "Sets up Flutter environment with caching"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get Flutter version
+      id: get-flutter-version
+      uses: zgosalvez/github-actions-get-flutter-version-env@v2
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: "stable"
+        flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+        cache: true
+        cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
+        cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
+
+    - name: Cache pub dependencies
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.PUB_CACHE }}
+        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: ${{ runner.os }}-pub-
+
+    - name: Get dependencies
+      shell: bash
+      run: flutter pub get

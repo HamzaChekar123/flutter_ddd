@@ -1,10 +1,12 @@
 name: CI
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
-    branches: [ main, develop ]
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 jobs:
   setup:
@@ -14,18 +16,10 @@ jobs:
       flutter-version: ${{ steps.get-flutter-version.outputs.version }}
     steps:
       - uses: actions/checkout@v3
-      
       - name: Get Flutter version
         id: get-flutter-version
         uses: zgosalvez/github-actions-get-flutter-version-env@v2
       
-      - name: Cache Flutter SDK
-        id: flutter-cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.flutter
-          key: flutter-sdk-${{ steps.get-flutter-version.outputs.version }}
-          restore-keys: flutter-sdk-
 
   verify:
     needs: setup
@@ -33,55 +27,33 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v3
-      
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: ${{ needs.setup.outputs.flutter-version }}
-          cache: true
-      
+        uses: ./.github/actions/setup-flutter
       - name: Install Dependencies
         run: flutter pub get
-        timeout-minutes: 5
       
-      - name: Analyze
-        run: flutter analyze --fatal-infos
-        timeout-minutes: 5
+      - name: Analyze project
+        uses: ./.github/actions/analyze-package
+
 
   test:
     needs: setup
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v3
-      
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: ${{ needs.setup.outputs.flutter-version }}
-          cache: true
-      
+        uses: ./.github/actions/setup-flutter
       - name: Install Dependencies
-        run: flutter pub get
-        timeout-minutes: 5
-      
+        run: flutter pub get 
       - name: Run Tests
         run: flutter test
         timeout-minutes: 5
       
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: HamzaChekar123/flutter_ddd
 
   build-and-test-package:
     name: Build and test package on ${{ matrix.os }}
     needs: setup
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -89,27 +61,11 @@ jobs:
     
     steps:
       - uses: actions/checkout@v3
-      
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          flutter-version: ${{ needs.setup.outputs.flutter-version }}
-          cache: true
-      
+        uses: ./.github/actions/setup-flutter
       - name: Install Dependencies
         run: flutter pub get
-        timeout-minutes: 5
-      
       - name: Build Package
-        run: dart compile exe bin/flutter_ddd.dart -o flutter_ddd
-        timeout-minutes: 5
+        uses: ./.github/actions/build-package
+        
       
-      - name: Test CLI with sample init
-        shell: bash
-        run: |
-          mkdir -p test_project
-          cd test_project
-          ../flutter_ddd --version
-          echo "CLI version test completed"
-        timeout-minutes: 3

@@ -1,7 +1,7 @@
 name: flutter_ddd
 description: "A Very Good Project created by Very Good CLI."
 version: 0.0.1
-homepage:
+repository: https://github.com/HamzaChekar123/flutter_ddd
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -14,6 +14,7 @@ dependencies:
   yaml_magic: ^1.0.6
   mason: ^0.1.0
   args: ^2.6.0
+  mason_logger: ^0.3.3
 
 dev_dependencies:
   flutter_test:

@@ -1,0 +1,52 @@
+name: "Build Package"
+description: "Builds and tests the Flutter package CLI"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Generate code
+      shell: bash
+      run: |
+        if [ -f "build.yaml" ]; then
+          dart run build_runner build --delete-conflicting-outputs
+        fi
+      
+    
+    - name: Build package
+      shell: bash
+      run: |
+        if [ -d "bin" ]; then
+          echo "Building CLI executable..."
+          dart compile exe bin/flutter_ddd.dart -o flutter_ddd
+        else
+          echo "No bin directory found, skipping executable build"
+        fi
+      
+    
+    - name: Test CLI
+      if: runner.os != 'Windows' && hashFiles('flutter_ddd') != ''
+      shell: bash
+      run: |
+        mkdir -p test_project
+        cd test_project
+        ../flutter_ddd --version
+        echo "CLI version test completed"
+      
+    
+    - name: Test CLI (Windows)
+      if: runner.os == 'Windows' && hashFiles('flutter_ddd.exe') != ''
+      shell: bash
+      run: |
+        mkdir -p test_project
+        cd test_project
+        ../flutter_ddd.exe --version
+        echo "CLI version test completed"
+      
+    
+    - name: Upload CLI artifact
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v4
+      with:
+        name: flutter_ddd_cli
+        path: flutter_ddd
+        retention-days: 7
