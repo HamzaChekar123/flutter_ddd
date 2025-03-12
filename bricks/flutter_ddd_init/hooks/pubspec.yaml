@@ -2,7 +2,7 @@ name: flutter_ddd_hooks
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: 3.29.0
+  flutter: ">=3.29.0"
 
 dependencies:
   mason: "^0.1.0"
