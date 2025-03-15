@@ -11,29 +11,41 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/to/develop-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## flutter_ddd – CLI for Generating Flutter Projects with DDD Architecture
+
+flutter_ddd is a command-line interface tool designed to set up Flutter projects aligned with Domain-Driven Design (DDD) principles and scalable feature modules. It streamlines project initialization, enforces clean architectural patterns, and accelerates development by using customizable project templates.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Generates a project structure that adheres to DDD principles
+- Supports scalable feature module generation
+- Simplifies configuration using a CLI-based interface
+- Customizable templates to suit your project's needs
 
-## Getting started
+## Getting Started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Ensure you have Dart and Flutter installed on your machine.
+
+1. Add flutter_ddd as a dependency:
+   ```bash
+   dart pub add flutter_ddd
+   ```
+2. Run the CLI tool to initialize your project:
+   ```bash
+   flutter_ddd init
+   ```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+Here is an example of creating a new Flutter project using flutter_ddd:
+```bash
+flutter_ddd create my_flutter_app
 ```
 
-## Additional information
+## Additional Information
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+For detailed documentation, tutorials, and contribution guidelines, please visit:
+
+- [Documentation](https://github.com/HamzaChekar123/flutter_ddd)
+- [GitHub Issues](https://github.com/HamzaChekar123/flutter_ddd/issues)
+- [Contribution Guidelines](https://github.com/HamzaChekar123/flutter_ddd/blob/main/CONTRIBUTING.md)
