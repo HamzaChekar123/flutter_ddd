@@ -4,15 +4,13 @@ description: "Sets up Flutter environment with caching"
 runs:
   using: "composite"
   steps:
-    - name: Get Flutter version
-      id: get-flutter-version
-      uses: zgosalvez/github-actions-get-flutter-version-env@v2
+
 
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
         channel: "stable"
-        flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+        flutter-version: "3.29.0"
         cache: true
         cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
         cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
